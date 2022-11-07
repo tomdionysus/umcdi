@@ -8,44 +8,29 @@
 // Author: Tom Cully <mail@tomcully.com>
 //
 
-#include "BCM2835_hw_spi.h"
+#include "transport/BCM2835_hw_spi.h"
 using namespace std;
 
-void RP2040_hw_spi ::init(uint8_t spiX, uint baudrate, uint8_t gpio_dc, gpio_rst) {
+void BCM2835_hw_spi ::init(uint32_t freqhz, uint8_t gpio_dc, uint8_t gpio_rst) {
 	// Save which GPIO pins have these functions
 	_dc = gpio_dc;
 	_rst = gpio_rst;
 
 	// Init GPIO
-    gpio_init(_dc);
-    gpio_init(_rst);
-    gpio_set_dir(_dc, GPIO_OUT);
-    gpio_set_dir(_rst, GPIO_OUT);
+    bcm2835_gpio_fsel(_dc, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_gpio_fsel(_rst, BCM2835_GPIO_FSEL_OUTP);
 
     // Init SPI
-	switch spiX {
-		case 0:
-			_spi = spi0;
-			break;
-		case 1:
-			_spi = spi1;
-			break;
-		default:
-			throw std:runtime_error("Invalid SPI interface specifier for BCM2835")
-	}
-	spi_init(_spi,baudrate);
-	spi_set_slave(_spi, false);
+	bcm2835_spi_begin();
+	bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);
+	bcm2835_spi_setDataMode(BCM2835_SPI_MODE0);
+	bcm2835_spi_setClockDivider(bcm2835_aux_spi_CalcClockDivider(freqhz)); 
+	bcm2835_spi_chipSelect(BCM2835_SPI_CS0);
+	bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS0, LOW);
 }
 
-void RP2040_hw_spi ::init(uint8_t spiX, uint baudrate, uint8_t gpio_dc, gpio_rst, uint data_bits, spi_cpol_t cpol, spi_cpha_t cpha, spi_order_t order) {
-	init(spiX, baudrate, gpio_dc, gpio_rst);
-	spi_set_format(_spi, data_bits, cpol, cpha, order);
-}
-
-void RP2040_hw_spi ::shutdown() {
-	spi_deinit(_spi);
-	gpio_deinit(_dc);
-	gpio_deinit(_rst);
+void BCM2835_hw_spi ::shutdown() {
+	bcm2835_spi_end();
 }
 
 uint8_t BCM2835_hw_spi ::read8() {
@@ -77,14 +62,15 @@ uint32_t BCM2835_hw_spi ::readBuffer(uint8_t* buffer, uint32_t length) {
 }
 
 uint32_t BCM2835_hw_spi ::writeBuffer(uint8_t* buffer, uint32_t length) {
-	return bcm2835_spi_writenb((char*)spidata,len);
+	bcm2835_spi_writenb((char*)buffer, length);
+	return length;
 }
 
 void BCM2835_hw_spi ::setDC(bool data)
 {
-	bcm2835_gpio_write(_cs, data ? HIGH : LOW)
+	bcm2835_gpio_write(_dc, data ? HIGH : LOW);
 }
 void BCM2835_hw_spi ::setRST(bool data)
 {
-	bcm2835_gpio_write(_dc, data ? HIGH : LOW)
+	bcm2835_gpio_write(_rst, data ? HIGH : LOW);
 }

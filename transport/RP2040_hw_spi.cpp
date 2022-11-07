@@ -8,7 +8,8 @@
 // Author: Tom Cully <mail@tomcully.com>
 //
 
-#include "RP2040_hw_spi.h"
+#include "transport/RP2040_hw_spi.h"
+
 using namespace std;
 
 void RP2040_hw_spi ::init(uint8_t spiX, uint baudrate, uint8_t gpio_dc, gpio_rst) {
@@ -49,13 +50,19 @@ void RP2040_hw_spi ::shutdown() {
 }
 
 uint8_t RP2040_hw_spi ::read8() {
-	throw std::runtime_error("Not Implemented");
+	uint8_t data;
+	spi_read_blocking(_spi, &data, 1);
+	return data;
 }
 uint16_t RP2040_hw_spi ::read16() {
-	throw std::runtime_error("Not Implemented");
+	uint16_t data;
+	spi_read_blocking(_spi, &data, 2);
+	return data;
 }
 uint32_t RP2040_hw_spi ::read32() {
-	throw std::runtime_error("Not Implemented");
+	uint32_t data;
+	spi_read_blocking(_spi, &data, 4);
+	return data;
 }
 
 void RP2040_hw_spi ::write8(uint8_t data) {
@@ -69,7 +76,7 @@ void RP2040_hw_spi ::write32(uint32_t data) {
 }
 
 uint32_t RP2040_hw_spi ::readBuffer(uint8_t* buffer, uint32_t length) {
-	throw std::runtime_error("Not Implemented");
+	return spi_read_blocking(_spi, &buffer, length);
 }
 
 uint32_t RP2040_hw_spi ::writeBuffer(uint8_t* buffer, uint32_t length) {

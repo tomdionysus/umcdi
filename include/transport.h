@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdexcept>
 
 using namespace std;
 
@@ -8,10 +9,6 @@ class Transport {
 public:
 	Transport();
 	~Transport();
-
-	// Init/Shutdown. Should be overridden for each transport.
-	virtual void init();
-	virtual void shutdown();
 
 	// Read 8/16/32 bits
 	virtual uint8_t read8();
@@ -33,15 +30,15 @@ public:
 	// Set Reset
 	virtual void setRST(bool data);
 
-	void writeCommand8(uint8_t cmd);
-	void writeCommand16(uint16_t cmd);
-	void writeCommand32(uint32_t cmd);
-	uint32_t writeCommandBuffer(uint8_t* buffer, uint32_t length);
+	virtual void writeCommand8(uint8_t cmd);
+	virtual void writeCommand16(uint16_t cmd);
+	virtual void writeCommand32(uint32_t cmd);
+	virtual uint32_t writeCommandBuffer(uint8_t* buffer, uint32_t length);
 
-	void writeData8(uint8_t data);
-	void writeData16(uint16_t data);
-	void writeData32(uint32_t data);
-	uint32_t writeDataBuffer(uint8_t* buffer, uint32_t length);
+	virtual void writeData8(uint8_t data);
+	virtual void writeData16(uint16_t data);
+	virtual void writeData32(uint32_t data);
+	virtual uint32_t writeDataBuffer(uint8_t* buffer, uint32_t length);
 
 protected:
 	uint8_t _rst;
