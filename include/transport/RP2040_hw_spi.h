@@ -11,10 +11,14 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdexcept>
 
 #include "pico/stdlib.h"
 
-class RP2040_hw_spi : public Transport {
+#include "transport.h"
+
+class RP2040_hw_spi : Transport {
 	void init(uint8_t spiX, uint baudrate, uint8_t gpio_dc, gpio_rst);
 	void init(uint8_t spiX, uint baudrate, uint8_t gpio_dc, gpio_rst, uint data_bits, spi_cpol_t cpol, spi_cpha_t cpha, spi_order_t order);
-}
+	void shutdown();
+};

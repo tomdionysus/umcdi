@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.12)
 project (umcdi)
 
 include_directories ( 
+	/usr/include
+	/usr/local/include
 	${CMAKE_SOURCE_DIR}/include
 	${CMAKE_SOURCE_DIR}/include/display
 	${CMAKE_SOURCE_DIR}/include/transport

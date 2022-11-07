@@ -9,12 +9,32 @@
 //
 
 #include <bcm2835.h>
-#include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdexcept>
 
-class BCM2835_hw_spi : public Transport {
-	void init(uint8_t spiX, uint frequency, uint8_t gpio_dc, gpio_rst);
-	void init(uint8_t spiX, uint frequency, uint8_t gpio_dc, gpio_rst, uint8_t bitorder, datamde);
-}
+#include "transport.h"
+
+class BCM2835_hw_spi : Transport {
+	void init(uint32_t freqhz, uint8_t gpio_dc, uint8_t gpio_rst);
+	void shutdown();
+
+	uint8_t read8();
+	uint16_t read16();
+	uint32_t read32();
+
+	void write8(uint8_t data);
+	void write16(uint16_t data);
+	void write32(uint32_t data);
+
+	uint32_t readBuffer(uint8_t* buffer, uint32_t length);
+	uint32_t writeBuffer(uint8_t* buffer, uint32_t length);
+
+	void setDC(bool data);
+	void setRST(bool data);
+
+protected:
+	uint8_t _spi;
+};

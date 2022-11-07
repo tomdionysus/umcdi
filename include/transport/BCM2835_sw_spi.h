@@ -13,22 +13,47 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdexcept>
 
-class BCM2835_sw_spi : public Transport {
-	void init(uint16_t clkdelay, uint8_t gpio_dc, gpio_rst, gpio_cs, gpio_sclk, gpio_sdata);
+#include "transport.h"
+
+class BCM2835_sw_spi : Transport {
+	void init(uint16_t sclkdelay, uint8_t gpio_dc, uint8_t gpio_rst, uint8_t gpio_cs, uint8_t gpio_sclk, uint8_t gpio_sdata);
+	void shutdown();
+	
+	uint8_t read8();
+	uint16_t read16();
+	uint32_t read32();
+
+	void write8(uint8_t data);
+	void write16(uint16_t data);
+	void write32(uint32_t data);
+
+	uint32_t readBuffer(uint8_t* buffer, uint32_t length);
+	uint32_t writeBuffer(uint8_t* buffer, uint32_t length);
+
+	void writeCommand8(uint8_t cmd);
+	void writeCommand16(uint16_t cmd);
+	void writeCommand32(uint32_t cmd);
+	uint32_t writeCommandBuffer(uint8_t* buffer, uint32_t length);
+
+	void writeData8(uint8_t data);
+	void writeData16(uint16_t data);
+	void writeData32(uint32_t data);
+	uint32_t writeDataBuffer(uint8_t* buffer, uint32_t length);
+
+	void setDC(bool data);
+	void setRST(bool data);
 
 protected:
 	uint8_t _cs;
 	uint8_t _sclk;
 	uint8_t _sdata;
-	uint16_t _clkdelay;
+	uint16_t _sclkdelay;
 
-	// Set Chip Select
 	void setCS(bool data);
-	// Set SCLK (bit bang CLOCK)
 	void setSCLK(bool data);
-	// Set SDATA (bit bang DATA)
 	void setSDATA(bool data);
 
-	virtual delay(uint32_t ms);
-}
+	void delay(uint32_t ms);
+};
