@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project (umcdi)
+project(umcdi CXX C ASM)
 
 set(PICO_SDK_FETCH_FROM_GIT On)
 include(pico_sdk_import.cmake)
