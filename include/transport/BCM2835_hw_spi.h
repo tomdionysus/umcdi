@@ -8,6 +8,9 @@
 // Author: Tom Cully <mail@tomcully.com>
 //
 
+#ifndef UMCDI_TRANSPORT_BCM2835_HW
+#define UMCDI_TRANSPORT_BCM2835_HW
+
 #include <bcm2835.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -18,7 +21,7 @@
 #include "transport.h"
 
 class BCM2835_hw_spi : Transport {
-	void init(uint32_t freqhz, uint8_t gpio_dc, uint8_t gpio_rst);
+	void init(uint16_t clockDivider, uint8_t gpio_dc, uint8_t gpio_rst);
 	void shutdown();
 
 	uint8_t read8();
@@ -38,3 +41,5 @@ class BCM2835_hw_spi : Transport {
 protected:
 	uint8_t _spi;
 };
+
+#endif // UMCDI_TRANSPORT_BCM2835_HW

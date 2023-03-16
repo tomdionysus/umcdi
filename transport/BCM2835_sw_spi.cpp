@@ -32,13 +32,16 @@ void BCM2835_sw_spi ::shutdown() {
 }
 
 uint8_t BCM2835_sw_spi ::read8() {
-	throw std::runtime_error("Not Implemented");
+	// throw std::runtime_error("Not Implemented");
+	return 0;
 }
 uint16_t BCM2835_sw_spi ::read16() {
-	throw std::runtime_error("Not Implemented");
+	// throw std::runtime_error("Not Implemented");
+	return 0;
 }
 uint32_t BCM2835_sw_spi ::read32() {
-	throw std::runtime_error("Not Implemented");
+	// throw std::runtime_error("Not Implemented");
+	return 0;
 }
 
 void BCM2835_sw_spi ::write8(uint8_t data) {
@@ -117,7 +120,8 @@ uint32_t BCM2835_sw_spi ::writeDataBuffer(uint8_t* buffer, uint32_t length) {
 }
 
 uint32_t BCM2835_sw_spi ::readBuffer(uint8_t* buffer, uint32_t length) {
-	throw std::runtime_error("Not Implemented");
+	// throw std::runtime_error("Not Implemented");
+	return 0;
 }
 
 uint32_t BCM2835_sw_spi ::writeBuffer(uint8_t* buffer, uint32_t length) {

@@ -33,14 +33,14 @@ if (NOT PICO_SDK_PATH)
         if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.17.0")
             FetchContent_Declare(
                     pico_sdk
-                    GIT_REPOSITORY https://github.com/raspberrypi/pico-sdk
+                    GIT_REPOSITORY git@github.com:raspberrypi/pico-sdk.git
                     GIT_TAG master
                     GIT_SUBMODULES_RECURSE FALSE
             )
         else ()
             FetchContent_Declare(
                     pico_sdk
-                    GIT_REPOSITORY https://github.com/raspberrypi/pico-sdk
+                    GIT_REPOSITORY git@github.com:raspberrypi/pico-sdk.git
                     GIT_TAG master
             )
         endif ()

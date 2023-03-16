@@ -5,8 +5,6 @@ Display ::Display(Transport *transport, uint16_t width, uint16_t height) {
 	_width = width;
 	_height = height;
 }
-Display ::~Display() {
-}
 
 void Display ::fillRectangle(uint16_t x, uint16_t y, uint16_t w, int16_t h, uint32_t rgb24) {
 	uint8_t i, j;
@@ -37,4 +35,3 @@ void Display ::fillScreen(uint32_t rgb24) {
 		}
 	}
 }
-

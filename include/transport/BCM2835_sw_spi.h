@@ -8,6 +8,9 @@
 //
 // Note: Software SPI is dramatically (x100+) less performant than Hardware SPI. Please consider using hardware SPI.
 
+#ifndef UMCDI_TRANSPORT_BCM2835_SW
+#define UMCDI_TRANSPORT_BCM2835_SW
+
 #include <bcm2835.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -57,3 +60,5 @@ protected:
 
 	void delay(uint32_t ms);
 };
+
+#endif // UMCDI_TRANSPORT_BCM2835_SW

@@ -1,3 +1,15 @@
+//
+// ST7735 Display driver for umcdi
+//
+// ST7735 SDK Documentation:
+//	* https://www.displayfuture.com/Display/datasheet/controller/ST7735.pdf
+//
+// Author: Tom Cully <mail@tomcully.com>
+//
+
+#ifndef UMCDI_DISPLAY_ST7735
+#define UMCDI_DISPLAY_ST7735
+
 #include <stdint.h>
 #include <stdlib.h>
 #include "display.h"
@@ -81,11 +93,10 @@
 #define TFT_MICROSEC_DELAY bcm2835_delayMicroseconds
 #define TFT_HIGHFREQ_DELAY 0 // Optional Software SPI delay uS
 
-class ST7735 : Display {
+class ST7735 : public Display {
 
 public:
-	ST7735();
-	~ST7735();
+	ST7735(Transport *transport, uint16_t width, uint16_t height) : Display(transport, width, height) {};
 
 	void drawPixel(uint16_t x, uint16_t y, uint32_t color);
 	void drawBitmap16(uint16_t x, uint16_t y, uint8_t *pBmp, uint16_t w, uint16_t h);
@@ -100,3 +111,5 @@ protected:
 	void setWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
 	uint16_t rgb24torgb565(uint32_t rgb24);
 };
+
+#endif // UMCDI_DISPLAY_ST7735

@@ -11,7 +11,7 @@
 #include "transport/BCM2835_hw_spi.h"
 using namespace std;
 
-void BCM2835_hw_spi ::init(uint32_t freqhz, uint8_t gpio_dc, uint8_t gpio_rst) {
+void BCM2835_hw_spi ::init(uint16_t clockDivider, uint8_t gpio_dc, uint8_t gpio_rst) {
 	// Save which GPIO pins have these functions
 	_dc = gpio_dc;
 	_rst = gpio_rst;
@@ -24,7 +24,7 @@ void BCM2835_hw_spi ::init(uint32_t freqhz, uint8_t gpio_dc, uint8_t gpio_rst) {
 	bcm2835_spi_begin();
 	bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);
 	bcm2835_spi_setDataMode(BCM2835_SPI_MODE0);
-	bcm2835_spi_setClockDivider(bcm2835_aux_spi_CalcClockDivider(freqhz)); 
+	bcm2835_spi_setClockDivider(clockDivider); 
 	bcm2835_spi_chipSelect(BCM2835_SPI_CS0);
 	bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS0, LOW);
 }
@@ -34,13 +34,16 @@ void BCM2835_hw_spi ::shutdown() {
 }
 
 uint8_t BCM2835_hw_spi ::read8() {
-	throw std::runtime_error("Not Implemented");
+	// throw std::runtime_error("Not Implemented");
+	return 0;
 }
 uint16_t BCM2835_hw_spi ::read16() {
-	throw std::runtime_error("Not Implemented");
+	// throw std::runtime_error("Not Implemented");
+	return 0;
 }
 uint32_t BCM2835_hw_spi ::read32() {
-	throw std::runtime_error("Not Implemented");
+	// throw std::runtime_error("Not Implemented");
+	return 0;
 }
 
 void BCM2835_hw_spi ::write8(uint8_t data) {
@@ -58,7 +61,8 @@ void BCM2835_hw_spi ::write32(uint32_t data) {
 }
 
 uint32_t BCM2835_hw_spi ::readBuffer(uint8_t* buffer, uint32_t length) {
-	throw std::runtime_error("Not Implemented");
+	// throw std::runtime_error("Not Implemented");
+	return 0;
 }
 
 uint32_t BCM2835_hw_spi ::writeBuffer(uint8_t* buffer, uint32_t length) {

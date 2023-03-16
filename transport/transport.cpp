@@ -1,5 +1,11 @@
 #include "transport.h"
 
+Transport::Transport() {
+}
+
+Transport::~Transport() {
+}
+
 void Transport ::writeCommand8(uint8_t cmd) {
 	setDC(false);
 	write8(cmd);
