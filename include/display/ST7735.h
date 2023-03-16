@@ -98,6 +98,12 @@ class ST7735 : public Display {
 public:
 	ST7735(Transport *transport, uint16_t width, uint16_t height) : Display(transport, width, height) {};
 
+	void init();
+
+	void Rcmd1();
+	void Rcmd2red();
+	void Rcmd3();
+
 	void drawPixel(uint16_t x, uint16_t y, uint32_t color);
 	void drawBitmap16(uint16_t x, uint16_t y, uint8_t *pBmp, uint16_t w, uint16_t h);
 	void drawBitmap24(uint16_t x, uint16_t y, uint8_t *pBmp, uint16_t w, uint16_t h);

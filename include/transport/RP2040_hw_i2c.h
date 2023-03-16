@@ -1,15 +1,15 @@
 //
-// RP2040_hw_spi (Raspberry Pi Pico) SPI interface for umcdi
+// RP2040_hw_i2c (Raspberry Pi Pico) SPI interface for umcdi
 //
 // RP2040 SDK Documentation:
 //	* GPIO: https://raspberrypi.github.io/pico-sdk-doxygen/group__hardware__gpio.html
-//  * SPI: https://raspberrypi.github.io/pico-sdk-doxygen/group__hardware__spi.html
+//  * SPI: https://raspberrypi.github.io/pico-sdk-doxygen/group__hardware__i2c.html
 //
 // Author: Tom Cully <mail@tomcully.com>
 //
 
-#ifndef UMCDI_TRANSPORT_RP2040_HW
-#define UMCDI_TRANSPORT_RP2040_HW
+#ifndef UMCDI_TRANSPORT_RP2040_HW_I2C
+#define UMCDI_TRANSPORT_RP2040_HW_I2C
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -17,11 +17,11 @@
 
 #include "transport.h"
 
-#include "hardware/spi.h"
+#include "hardware/i2c.h"
 
-class RP2040_hw_spi : public Transport {
+class RP2040_hw_i2c : public Transport {
 public:
-	void init(uint8_t spiX, uint baudrate, uint8_t gpio_dc, uint8_t gpio_rst);
+	void init(uint8_t i2cN, uint baudrate, uint8_t addr, uint8_t gpio_dc, uint8_t gpio_rst);
 	void shutdown();
 
 	// Read 8/16/32 bits
@@ -57,7 +57,8 @@ public:
 	uint32_t writeDataBuffer(uint8_t* buffer, uint32_t length);
 
 protected:
-	spi_inst_t* _spi;
+	i2c_inst_t* _i2c;
+	uint8_t _addr;
 };
 
-#endif // UMCDI_TRANSPORT_RP2040_HW
+#endif // UMCDI_TRANSPORT_RP2040_HW_I2C

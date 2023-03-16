@@ -22,6 +22,8 @@ public:
 	virtual void write16(uint16_t data) = 0;
 	virtual void write32(uint32_t data) = 0;
 
+	virtual void sleep_ms(uint32_t ms) = 0;
+
 	// Read into a buffer, up to length bytes. Return no. of read bytes
 	virtual uint32_t readBuffer(uint8_t* buffer, uint32_t length) = 0;
 	// Write from a buffer, length bytes. Return no. of written bytes

@@ -42,6 +42,6 @@ void Transport ::writeData32(uint32_t data) {
 }
 
 uint32_t Transport ::writeDataBuffer(uint8_t* buffer, uint32_t length) {
-	setDC(false);
+	setDC(true);
 	return writeBuffer(buffer, length);
 }

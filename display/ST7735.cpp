@@ -2,6 +2,14 @@
 
 using namespace std;
 
+void ST7735 ::init() {
+	Rcmd1();
+	Rcmd2red();
+	Rcmd3();
+	_transport->writeCommand8(ST7735_MADCTL);
+	_transport->writeData8(0xC0);
+}
+
 void ST7735 ::drawPixel(uint16_t x, uint16_t y, uint32_t color) {
 	if ((x >= _width) || (y >= _height)) return;
 	setWindow(x, y, x + 1, y + 1);
@@ -110,6 +118,72 @@ void ST7735 ::fillRectangle(uint16_t x, uint16_t y, uint16_t w, int16_t h, uint3
 	free(buffer);
 }
 
+void ST7735 ::fillScreen(uint32_t rgb24) {
+	fillRectangle(0, 0, _width, _height, rgb24);
+}
+
 uint16_t ST7735 ::rgb24torgb565(uint32_t rgb24) {
 	return (((rgb24 >> 16) & 0xF8) << 8) | (((rgb24 >> 8) & 0xFC) << 3) | ((rgb24 & 0xFF) >> 3);
+}
+
+void ST7735 ::Rcmd1() {
+	_transport->writeCommand8(ST7735_SWRESET);
+	_transport->sleep_ms(150);
+	_transport->writeCommand8(ST7735_SLPOUT);
+	_transport->sleep_ms(500);
+	_transport->writeCommand8(ST7735_FRMCTR1);
+	static uint8_t seq1[] { 0x01, 0x2C, 0x2D };
+	_transport->writeDataBuffer(seq1, sizeof(seq1));
+	_transport->writeCommand8(ST7735_FRMCTR2);
+	_transport->writeDataBuffer(seq1, sizeof(seq1));
+	_transport->writeCommand8(ST7735_FRMCTR3);
+	static uint8_t seq2[] { 0x01, 0x2C, 0x2D, 0x01, 0x2C, 0x2D }; 
+	_transport->writeDataBuffer(seq2, sizeof(seq2));
+	_transport->writeCommand8(ST7735_INVCTR);
+	_transport->writeData8(0x07);
+	_transport->writeCommand8(ST7735_PWCTR1);
+	static uint8_t seq3[] { 0xA2, 0x02, 0x84 }; 
+	_transport->writeDataBuffer(seq3, sizeof(seq3));
+	_transport->writeCommand8(ST7735_PWCTR2);
+	_transport->writeData8(0xC5);
+	_transport->writeCommand8(ST7735_PWCTR3);
+	_transport->writeData8(0x0A);
+	_transport->writeData8(0x00);
+	_transport->writeCommand8(ST7735_PWCTR4);
+	_transport->writeData8(0x8A);
+	_transport->writeData8(0x2A);
+	_transport->writeCommand8(ST7735_PWCTR5);
+	_transport->writeData8(0x8A);
+	_transport->writeData8(0xEE);
+	_transport->writeCommand8(ST7735_VMCTR1);
+	_transport->writeData8(0x0E);
+	_transport->writeCommand8(ST7735_INVOFF);
+	_transport->writeCommand8(ST7735_MADCTL);
+	_transport->writeData8(0xC8);
+	_transport->writeCommand8(ST7735_COLMOD);
+	_transport->writeData8(0x05);
+}
+
+void ST7735 ::Rcmd2red() {
+	_transport->writeCommand8(ST7735_CASET);
+	static uint8_t seq1[] { 0x00, 0x00, 0x00, 0x7F };
+	_transport->writeDataBuffer(seq1, sizeof(seq1));
+	_transport->writeCommand8(ST7735_RASET);
+	static uint8_t seq2[] { 0x00, 0x00, 0x00, 0x9F };
+	_transport->writeDataBuffer(seq2, sizeof(seq2));
+}
+
+// Desc: init sub-routine
+
+void ST7735 ::Rcmd3() {
+	_transport->writeCommand8(ST7735_GMCTRP1);
+	static uint8_t seq1[] { 0x02, 0x1C, 0x07, 0x12, 0x37, 0x32, 0x29, 0x2D, 0x29, 0x25, 0x2B, 0x39, 0x00, 0x01, 0x03, 0x10 };
+	_transport->writeDataBuffer(seq1, sizeof(seq1));
+	_transport->writeCommand8(ST7735_GMCTRN1);
+	static uint8_t seq2[] { 0x03, 0x1D, 0x07, 0x06, 0x2E, 0x2C, 0x29, 0x2D, 0x2E, 0x2E, 0x37, 0x3F, 0x00, 0x00, 0x02, 0x10 };
+	_transport->writeDataBuffer(seq2, sizeof(seq2));
+	_transport->writeCommand8(ST7735_NORON);
+	_transport->sleep_ms(10);
+	_transport->writeCommand8(ST7735_DISPON);
+	_transport->sleep_ms(100);
 }

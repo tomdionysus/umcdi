@@ -66,6 +66,10 @@ void BCM2835_sw_spi ::write32(uint32_t data) {
 	write8(data);
 }
 
+void BCM2835_sw_spi ::sleep_ms(uint32_t ms) {
+	bcm2835_delay(ms);
+}
+
 void BCM2835_sw_spi ::writeCommand8(uint8_t cmd) {
 	setDC(false);
 	setCS(false);

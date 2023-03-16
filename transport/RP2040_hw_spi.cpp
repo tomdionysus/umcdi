@@ -38,7 +38,14 @@ void RP2040_hw_spi ::init(uint8_t spiX, uint baudrate, uint8_t gpio_dc, uint8_t 
 			// throw std:runtime_error("Invalid SPI interface specifier for RP2040")
 	}
 	spi_init(_spi, baudrate);
-	spi_set_slave(_spi, false);
+	
+	/* SPI parameter config */
+	spi_set_format(_spi,
+		8, /* data_bits */
+		SPI_CPOL_0, /* cpol */
+		SPI_CPHA_0, /* cpha */
+		SPI_MSB_FIRST /* order */
+	);
 }
 
 void RP2040_hw_spi ::shutdown() {
@@ -71,6 +78,10 @@ void RP2040_hw_spi ::write16(uint16_t data) {
 }
 void RP2040_hw_spi ::write32(uint32_t data) {
 	spi_write_blocking(_spi, (uint8_t*)(&data), 4);
+}
+
+void RP2040_hw_spi ::sleep_ms(uint32_t ms) {
+	sleep_ms(ms);
 }
 
 uint32_t RP2040_hw_spi ::readBuffer(uint8_t* buffer, uint32_t length) {

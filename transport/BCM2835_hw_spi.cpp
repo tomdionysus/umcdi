@@ -60,6 +60,10 @@ void BCM2835_hw_spi ::write32(uint32_t data) {
 	bcm2835_spi_transfer(data);
 }
 
+void BCM2835_hw_spi ::sleep_ms(uint32_t ms) {
+	bcm2835_delay(ms);
+}
+
 uint32_t BCM2835_hw_spi ::readBuffer(uint8_t* buffer, uint32_t length) {
 	// throw std::runtime_error("Not Implemented");
 	return 0;
