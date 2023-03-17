@@ -8,7 +8,7 @@
 // Author: Tom Cully <mail@tomcully.com>
 //
 
-#include "transport/RP2040_hw_i2c.h"
+#include "RP2040_hw_i2c.h"
 
 #include "hardware/i2c.h"
 #include "hardware/gpio.h"
@@ -75,7 +75,7 @@ void RP2040_hw_i2c ::write32(uint32_t data) {
 	i2c_write_blocking(_i2c, _addr, (uint8_t*)(&data), 4, false);
 }
 
-void RP2040_hw_i2c ::sleep_ms(uint32_t ms) {
+void RP2040_hw_i2c ::delay_ms(uint32_t ms) {
 	sleep_ms(ms);
 }
 

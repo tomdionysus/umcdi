@@ -9,7 +9,7 @@ project(umcdi CXX C ASM)
 pico_sdk_init()
 
 include_directories ( 
-	${CMAKE_SOURCE_DIR}/include
+	${CMAKE_SOURCE_DIR}/src
 )
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -19,14 +19,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_library(
 	umcdi
 
-	display/display.cpp
-	display/ST7735.cpp
+	src/display.cpp
+	src/ST7735.cpp
 	
-	transport/transport.cpp
-	transport/BCM2835_hw_spi.cpp
-	transport/BCM2835_sw_spi.cpp
-	transport/RP2040_hw_spi.cpp
-	transport/RP2040_hw_i2c.cpp
+	src/transport.cpp
+	src/BCM2835_hw_spi.cpp
+	src/BCM2835_sw_spi.cpp
+	src/RP2040_hw_spi.cpp
+	src/RP2040_hw_i2c.cpp
 )
 target_link_libraries(umcdi pico_stdlib hardware_spi hardware_i2c)
 

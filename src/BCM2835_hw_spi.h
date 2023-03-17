@@ -32,7 +32,7 @@ class BCM2835_hw_spi : Transport {
 	void write16(uint16_t data);
 	void write32(uint32_t data);
 
-	void sleep_ms(uint32_t ms);
+	void delay_ms(uint32_t ms);
 
 	uint32_t readBuffer(uint8_t* buffer, uint32_t length);
 	uint32_t writeBuffer(uint8_t* buffer, uint32_t length);

@@ -21,7 +21,7 @@
 #include "transport.h"
 
 class BCM2835_sw_spi : Transport {
-	void init(uint16_t sclkdelay, uint8_t gpio_dc, uint8_t gpio_rst, uint8_t gpio_cs, uint8_t gpio_sclk, uint8_t gpio_sdata);
+	void init(uint16_t sclkdelay_ms, uint8_t gpio_dc, uint8_t gpio_rst, uint8_t gpio_cs, uint8_t gpio_sclk, uint8_t gpio_sdata);
 	void shutdown();
 	
 	uint8_t read8();
@@ -32,7 +32,7 @@ class BCM2835_sw_spi : Transport {
 	void write16(uint16_t data);
 	void write32(uint32_t data);
 
-	void sleep_ms(uint32_t ms);
+	void delay_ms(uint32_t ms);
 	
 	uint32_t readBuffer(uint8_t* buffer, uint32_t length);
 	uint32_t writeBuffer(uint8_t* buffer, uint32_t length);
@@ -54,13 +54,11 @@ protected:
 	uint8_t _cs;
 	uint8_t _sclk;
 	uint8_t _sdata;
-	uint16_t _sclkdelay;
+	uint16_t _sclkdelay_ms;
 
 	void setCS(bool data);
 	void setSCLK(bool data);
 	void setSDATA(bool data);
-
-	void delay(uint32_t ms);
 };
 
 #endif // UMCDI_TRANSPORT_BCM2835_SW

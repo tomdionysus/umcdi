@@ -34,7 +34,7 @@ public:
 	void write16(uint16_t data);
 	void write32(uint32_t data);
 
-	void sleep_ms(uint32_t ms);
+	void delay_ms(uint32_t ms);
 
 	// Read into a buffer, up to length bytes. Return no. of read bytes
 	uint32_t readBuffer(uint8_t* buffer, uint32_t length);

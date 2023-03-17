@@ -1,11 +1,5 @@
 #include "display.h"
 
-Display ::Display(Transport *transport, uint16_t width, uint16_t height) {
-	_transport = transport;
-	_width = width;
-	_height = height;
-}
-
 void Display ::fillRectangle(uint16_t x, uint16_t y, uint16_t w, int16_t h, uint32_t rgb24) {
 	uint8_t i, j;
 	uint32_t rgb, ptr;

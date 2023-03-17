@@ -8,17 +8,17 @@
 //
 // Note: Software SPI is dramatically (x100+) less performant than Hardware SPI. Please consider using hardware SPI.
 
-#include "transport/BCM2835_sw_spi.h"
+#include "BCM2835_sw_spi.h"
 using namespace std;
 
-void BCM2835_sw_spi ::init(uint16_t sclkdelay, uint8_t gpio_dc, uint8_t gpio_rst, uint8_t gpio_cs, uint8_t gpio_sclk, uint8_t gpio_sdata) {
+void BCM2835_sw_spi ::init(uint16_t sclkdelay_ms, uint8_t gpio_dc, uint8_t gpio_rst, uint8_t gpio_cs, uint8_t gpio_sclk, uint8_t gpio_sdata) {
 	// Save which GPIO pins have these functions
 	_dc = gpio_dc;
 	_rst = gpio_rst;
 	_cs = gpio_cs;
 	_sclk = gpio_sclk;
 	_sdata = gpio_sdata;
-	_sclkdelay = sclkdelay;
+	_sclkdelay_ms = sclkdelay_ms;
 
 	// Init GPIO
     bcm2835_gpio_fsel(_dc, BCM2835_GPIO_FSEL_OUTP);
@@ -49,10 +49,10 @@ void BCM2835_sw_spi ::write8(uint8_t data) {
 		setSDATA(false);
 		if (data & 0x80) setSDATA(true); // b1000000 Mask with 0 & all zeros out.
 		setSCLK(true);
-		delay(_sclkdelay);
+		delay_ms(_sclkdelay_ms);
 		data <<= 1;
 		setSCLK(false);
-		BCM2835_sw_spi::delay(_sclkdelay);
+		BCM2835_sw_spi::delay_ms(_sclkdelay_ms);
 	}
 }
 void BCM2835_sw_spi ::write16(uint16_t data) {
@@ -66,7 +66,7 @@ void BCM2835_sw_spi ::write32(uint32_t data) {
 	write8(data);
 }
 
-void BCM2835_sw_spi ::sleep_ms(uint32_t ms) {
+void BCM2835_sw_spi ::delay_ms(uint32_t ms) {
 	bcm2835_delay(ms);
 }
 
@@ -153,8 +153,4 @@ void BCM2835_sw_spi ::setSCLK(bool data) {
 
 void BCM2835_sw_spi ::setSDATA(bool data) {
 	bcm2835_gpio_write(_sdata, data ? HIGH : LOW);
-}
-
-void BCM2835_sw_spi ::delay(uint32_t ms) {
-	bcm2835_delayMicroseconds(ms);
 }

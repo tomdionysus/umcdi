@@ -21,7 +21,7 @@
 
 class RP2040_hw_spi : public Transport {
 public:
-	void init(uint8_t spiX, uint baudrate, uint8_t gpio_dc, uint8_t gpio_rst);
+	void init(uint8_t spiX, uint baudrate, uint8_t gpio_dc, uint8_t gpio_rst, uint8_t gpio_cs, uint8_t gpio_scl, uint8_t gpio_sda);
 	void shutdown();
 
 	// Read 8/16/32 bits
@@ -34,7 +34,7 @@ public:
 	void write16(uint16_t data);
 	void write32(uint32_t data);
 
-	void sleep_ms(uint32_t ms);
+	void delay_ms(uint32_t ms);
 
 	// Read into a buffer, up to length bytes. Return no. of read bytes
 	uint32_t readBuffer(uint8_t* buffer, uint32_t length);
@@ -45,6 +45,8 @@ public:
 	void setDC(bool data);
 	// Set Reset
 	void setRST(bool data);
+	// Set CS
+	void setCS(bool data);
 
 	void writeCommand8(uint8_t cmd);
 	void writeCommand16(uint16_t cmd);
@@ -58,6 +60,9 @@ public:
 
 protected:
 	spi_inst_t* _spi;
+
+	uint8_t _scl;
+	uint8_t _sda;
 };
 
 #endif // UMCDI_TRANSPORT_RP2040_HW

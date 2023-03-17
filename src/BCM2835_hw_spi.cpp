@@ -8,7 +8,7 @@
 // Author: Tom Cully <mail@tomcully.com>
 //
 
-#include "transport/BCM2835_hw_spi.h"
+#include "BCM2835_hw_spi.h"
 using namespace std;
 
 void BCM2835_hw_spi ::init(uint16_t clockDivider, uint8_t gpio_dc, uint8_t gpio_rst) {
@@ -60,7 +60,7 @@ void BCM2835_hw_spi ::write32(uint32_t data) {
 	bcm2835_spi_transfer(data);
 }
 
-void BCM2835_hw_spi ::sleep_ms(uint32_t ms) {
+void BCM2835_hw_spi ::delay_ms(uint32_t ms) {
 	bcm2835_delay(ms);
 }
 

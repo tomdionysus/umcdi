@@ -88,27 +88,25 @@
 #define  ST7735_GREY    0x9CD1
 #define  ST7735_BROWN   0x6201
 
-// Delays
-#define TFT_MILLISEC_DELAY bcm2835_delay
-#define TFT_MICROSEC_DELAY bcm2835_delayMicroseconds
-#define TFT_HIGHFREQ_DELAY 0 // Optional Software SPI delay uS
+// delay_mss
+#define TFT_MILLISEC_delay_ms bcm2835_delay_ms
+#define TFT_MICROSEC_delay_ms bcm2835_delay_msMicroseconds
+#define TFT_HIGHFREQ_delay_ms 0 // Optional Software SPI delay_ms uS
 
 class ST7735 : public Display {
 
 public:
-	ST7735(Transport *transport, uint16_t width, uint16_t height) : Display(transport, width, height) {};
+	ST7735(Transport *transport, uint16_t width, uint16_t height);
 
 	void init();
 
-	void Rcmd1();
-	void Rcmd2red();
-	void Rcmd3();
-
-	void drawPixel(uint16_t x, uint16_t y, uint32_t color);
-	void drawBitmap16(uint16_t x, uint16_t y, uint8_t *pBmp, uint16_t w, uint16_t h);
-	void drawBitmap24(uint16_t x, uint16_t y, uint8_t *pBmp, uint16_t w, uint16_t h);
-	void fillRectangle(uint16_t x, uint16_t y, uint16_t w, int16_t h, uint32_t color);
-	void fillScreen(uint32_t color);
+	void drawPixel(uint16_t x, uint16_t y, uint32_t color) override;
+	void drawBitmap16(uint16_t x, uint16_t y, uint8_t *pBmp, uint16_t w, uint16_t h) override;
+	void drawBitmap24(uint16_t x, uint16_t y, uint8_t *pBmp, uint16_t w, uint16_t h) override;
+	void fillRectangle(uint16_t x, uint16_t y, uint16_t w, int16_t h, uint32_t color) override;
+	void fillScreen(uint32_t color) override;
+	
+	void setRotation(uint8_t rot) override;
 
 protected:
 	uint16_t _XStart;
