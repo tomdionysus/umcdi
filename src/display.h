@@ -15,12 +15,13 @@ public:
 	virtual void fillRectangle(uint16_t x, uint16_t y, uint16_t w, int16_t h, uint32_t color);
 	virtual void fillScreen(uint32_t color);
 
-	virtual void setRotation(uint8_t rot);
+	virtual void setRotation(uint8_t rot) = 0;
 
 protected:
 	Transport *_transport;
 	uint16_t _width;
 	uint16_t _height;
+	uint8_t _rotation;
 
 	uint16_t rgb24torgb565(uint32_t rgb24);
 	uint32_t rgb565torgb24(uint16_t rgb565);

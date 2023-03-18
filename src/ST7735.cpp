@@ -2,10 +2,13 @@
 
 using namespace std;
 
-ST7735 ::ST7735(Transport *transport, uint16_t width, uint16_t height) {
+ST7735 ::ST7735(Transport *transport, uint16_t width, uint16_t height, uint8_t rotation) {
 	_transport = transport;
 	_width = width;
 	_height = height;
+	_rotation = rotation;
+	_XStart = 1;
+	_YStart = 26;
 }
 
 void ST7735 ::init() {
@@ -16,26 +19,26 @@ void ST7735 ::init() {
 	_transport->setRST(true);
 	_transport->delay_ms(20);
 	
-	_transport->writeCommand8(0x11);	// turn off sleep mode
+	_transport->writeCommand8(ST7735_SLPOUT);	// turn off sleep mode
 	_transport->delay_ms(100);
 
-	_transport->writeCommand8(0x21);	// display inversion mode
+	_transport->writeCommand8(ST7735_INVON);	// display inversion mode
 
-	_transport->writeCommand8(0xB1);	// Set the frame frequency of the full colors normal mode
-									// Frame rate=fosc/((RTNA x 2 + 40) x (LINE + FPA + BPA +2))
-									// fosc = 850kHz
-	_transport->writeData8(0x05);	// RTNA
-	_transport->writeData8(0x3A);	// FPA
-	_transport->writeData8(0x3A);	// BPA
+	_transport->writeCommand8(ST7735_FRMCTR1);	// Set the frame frequency of the full colors normal mode
+												// Frame rate=fosc/((RTNA x 2 + 40) x (LINE + FPA + BPA +2))
+												// fosc = 850kHz
+	_transport->writeData8(0x05);				// RTNA
+	_transport->writeData8(0x3A);				// FPA
+	_transport->writeData8(0x3A);				// BPA
 
-	_transport->writeCommand8(0xB2);	// Set the frame frequency of the Idle mode
-									// Frame rate=fosc/((RTNB x 2 + 40) x (LINE + FPB + BPB +2))
-									// fosc = 850kHz
-	_transport->writeData8(0x05);	// RTNB
-	_transport->writeData8(0x3A);	// FPB
-	_transport->writeData8(0x3A);	// BPB
-
-	_transport->writeCommand8(0xB3);	// Set the frame frequency of the Partial mode/ full colors
+	_transport->writeCommand8(ST7735_FRMCTR2);	// Set the frame frequency of the Idle mode
+												// Frame rate=fosc/((RTNB x 2 + 40) x (LINE + FPB + BPB +2))
+												// fosc = 850kHz
+	_transport->writeData8(0x05);				// RTNB
+	_transport->writeData8(0x3A);				// FPB
+	_transport->writeData8(0x3A);				// BPB
+			
+	_transport->writeCommand8(ST7735_FRMCTR3);	// Set the frame frequency of the Partial mode/ full colors
 	_transport->writeData8(0x05);  
 	_transport->writeData8(0x3A);
 	_transport->writeData8(0x3A);
@@ -43,33 +46,32 @@ void ST7735 ::init() {
 	_transport->writeData8(0x3A);
 	_transport->writeData8(0x3A);
 
-	_transport->writeCommand8(0xB4);
+	_transport->writeCommand8(ST7735_INVCTR);
 	_transport->writeData8(0x03);
 
-	_transport->writeCommand8(0xC0);
+	_transport->writeCommand8(ST7735_PWCTR1);
 	_transport->writeData8(0x62);
 	_transport->writeData8(0x02);
 	_transport->writeData8(0x04);
 
-	_transport->writeCommand8(0xC1);
+	_transport->writeCommand8(ST7735_PWCTR1);
 	_transport->writeData8(0xC0);
 
-	_transport->writeCommand8(0xC2);
+	_transport->writeCommand8(ST7735_PWCTR2);
 	_transport->writeData8(0x0D);
 	_transport->writeData8(0x00);
 
-	_transport->writeCommand8(0xC3);
+	_transport->writeCommand8(ST7735_PWCTR3);
 	_transport->writeData8(0x8D);
 	_transport->writeData8(0x6A);   
 
-	_transport->writeCommand8(0xC4);
-	_transport->writeData8(0x8D); 
+	_transport->writeCommand8(ST7735_PWCTR4);
 	_transport->writeData8(0xEE); 
 
-	_transport->writeCommand8(0xC5);  /*VCOM*/
+	_transport->writeCommand8(ST7735_PWCTR5);  /*VCOM*/
 	_transport->writeData8(0x0E);    
 
-	_transport->writeCommand8(0xE0);
+	_transport->writeCommand8(ST7735_GMCTRP1); // Positive Gamma Correction
 	_transport->writeData8(0x10);
 	_transport->writeData8(0x0E);
 	_transport->writeData8(0x02);
@@ -87,7 +89,7 @@ void ST7735 ::init() {
 	_transport->writeData8(0x0E);
 	_transport->writeData8(0x10);
 
-	_transport->writeCommand8(0xE1);
+	_transport->writeCommand8(ST7735_GMCTRN1); // Negative Gamma Correction
 	_transport->writeData8(0x10);
 	_transport->writeData8(0x0E);
 	_transport->writeData8(0x03);
@@ -105,27 +107,30 @@ void ST7735 ::init() {
 	_transport->writeData8(0x0E);
 	_transport->writeData8(0x10);
 
-	_transport->writeCommand8(0x3A);	// define the format of RGB picture data
-	_transport->writeData8(0x05);	// 16-bit/pixel
+	_transport->writeCommand8(ST7735_COLMOD);	// define the format of RGB picture data
+	_transport->writeData8(0x05);				// 16-bit/pixel
 
-	setRotation(0);
+	setRotation(_rotation);
 
-	_transport->writeCommand8(0x29);	// Display On
+	fillScreen(0x000000);
+
+	_transport->writeCommand8(ST7735_DISPON);	// Display On
 }
 
 void ST7735 ::drawPixel(uint16_t x, uint16_t y, uint32_t color) {
 	if ((x >= _width) || (y >= _height)) return;
-	setWindow(x, y, x + 1, y + 1);
+	setWindow(x, y, x, y);
 	_transport->writeData16(rgb24torgb565(color));
 }
 
 void ST7735 ::setWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
 	_transport->writeCommand8(ST7735_CASET);
-	_transport->writeData16(x0 + _XStart);
-	_transport->writeData16(x1 + _XStart);
+	_transport->writeData16(x0+_XStart);
+	_transport->writeData16(x1+_XStart);
 	_transport->writeCommand8(ST7735_RASET);
-	_transport->writeData16(y0 +_YStart);
-	_transport->writeData16(y1 +_YStart);
+	_transport->writeData16(y0+_YStart);
+	_transport->writeData16(y1+_YStart);
+	
 	_transport->writeCommand8(ST7735_RAMWR);
 }
 
@@ -231,10 +236,11 @@ uint16_t ST7735 ::rgb24torgb565(uint32_t rgb24) {
 
 void ST7735 ::setRotation(uint8_t rot)
 {
+	_rotation = rot;
 	// Memory data access control (MADCTL)
-	_transport->writeCommand8(0x36);
-	if(rot == 0) _transport->writeData8(0x00 | (1<<3));
-	else if(rot == 1) _transport->writeData8(0xC0 | (1<<3));
-	else if(rot == 2) _transport->writeData8(0x70 | (1<<3));
-	else _transport->writeData8(0xA0 | (1<<3));
+	_transport->writeCommand8(ST7735_MADCTL);
+	if(_rotation == 0) _transport->writeData8(0x00 | 0x08);
+	else if(_rotation == 1) _transport->writeData8(0xC0 | 0x08);
+	else if(_rotation == 2) _transport->writeData8(0x70 | 0x08);
+	else _transport->writeData8(0xA0 | 0x08);
 }

@@ -33,6 +33,8 @@ public:
 	virtual void setDC(bool data) = 0;
 	// Set Reset
 	virtual void setRST(bool data) = 0;
+	// Set Chip Select
+	virtual void setCS(bool data) = 0;
 
 	void writeCommand8(uint8_t cmd);
 	void writeCommand16(uint16_t cmd);

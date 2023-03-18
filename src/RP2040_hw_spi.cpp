@@ -95,11 +95,13 @@ void RP2040_hw_spi ::write8(uint8_t data) {
 }
 void RP2040_hw_spi ::write16(uint16_t data) {
 	setCS(false);
+	data = (data & 0xFF)<<8 | ((data & 0xFF00) >> 8);
 	spi_write_blocking(_spi, (uint8_t*)(&data), 2);
 	setCS(true);
 }
 void RP2040_hw_spi ::write32(uint32_t data) {
 	setCS(false);
+	data = ((data & 0xFF)<<24) | ((data & 0xFF00) << 8) | ((data & 0xFF0000)>>8) | ((data & 0xFF00000)>>24);
 	spi_write_blocking(_spi, (uint8_t*)(&data), 4);
 	setCS(true);
 }
@@ -124,15 +126,15 @@ uint32_t RP2040_hw_spi ::writeBuffer(uint8_t* buffer, uint32_t length) {
 
 void RP2040_hw_spi ::setDC(bool data)
 {
-	gpio_put(_dc, data);
+	gpio_put(_dc, data ? 1 : 0);
 }
 
 void RP2040_hw_spi ::setRST(bool data)
 {
-	gpio_put(_rst, data);
+	gpio_put(_rst, data ? 1 : 0);
 }
 
 void RP2040_hw_spi ::setCS(bool data)
 {
-	gpio_put(_cs, data);
+	gpio_put(_cs, data ? 1 : 0);
 }

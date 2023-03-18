@@ -96,7 +96,7 @@
 class ST7735 : public Display {
 
 public:
-	ST7735(Transport *transport, uint16_t width, uint16_t height);
+	ST7735(Transport *transport, uint16_t width, uint16_t height, uint8_t rotation);
 
 	void init();
 
