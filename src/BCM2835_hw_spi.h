@@ -20,8 +20,9 @@
 
 #include "transport.h"
 
-class BCM2835_hw_spi : Transport {
-	void init(uint16_t clockDivider, uint8_t gpio_dc, uint8_t gpio_rst);
+class BCM2835_hw_spi : public Transport {
+public:
+	void init(uint16_t clockDivider, uint8_t gpio_dc, uint8_t gpio_rst, uint8_t gpio_cs);
 	void shutdown();
 
 	uint8_t read8();
@@ -39,6 +40,7 @@ class BCM2835_hw_spi : Transport {
 
 	void setDC(bool data);
 	void setRST(bool data);
+	void setCS(bool data);
 
 protected:
 	uint8_t _spi;

@@ -24,10 +24,9 @@ add_library(
 	
 	src/transport.cpp
 	src/BCM2835_hw_spi.cpp
-	src/BCM2835_sw_spi.cpp
 	src/RP2040_hw_spi.cpp
 )
-target_link_libraries(umcdi pico_stdlib hardware_spi hardware_i2c)
+target_link_libraries(umcdi pico_stdlib hardware_spi bcm2835)
 
 # Examples
 
@@ -39,4 +38,9 @@ add_executable(
 pico_add_extra_outputs(rp2040_st7735)
 target_link_libraries(rp2040_st7735 umcdi)
 
-
+project(bcm2835_st7735 CXX C)
+add_executable(
+	bcm2835_st7735
+	examples/BCM2835_ST7735/main.cpp
+)
+target_link_libraries(bcm2835_st7735 umcdi)

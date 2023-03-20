@@ -11,7 +11,7 @@
 #include "BCM2835_hw_spi.h"
 using namespace std;
 
-void BCM2835_hw_spi ::init(uint16_t clockDivider, uint8_t gpio_dc, uint8_t gpio_rst) {
+void BCM2835_hw_spi ::init(uint16_t clockDivider, uint8_t gpio_dc, uint8_t gpio_rst, uint8_t gpio_cs) {
 	// Save which GPIO pins have these functions
 	_dc = gpio_dc;
 	_rst = gpio_rst;
@@ -78,7 +78,13 @@ void BCM2835_hw_spi ::setDC(bool data)
 {
 	bcm2835_gpio_write(_dc, data ? HIGH : LOW);
 }
+
 void BCM2835_hw_spi ::setRST(bool data)
 {
 	bcm2835_gpio_write(_rst, data ? HIGH : LOW);
+}
+
+void BCM2835_hw_spi ::setCS(bool data)
+{
+	// BCM2835 activates CS automatically on I/O
 }
