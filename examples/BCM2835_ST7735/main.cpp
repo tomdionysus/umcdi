@@ -2,6 +2,7 @@
 #include "ST7735.h"
 
 #include <bcm2835.h>
+#include <stdio.h>
 
 #define GPIO_CS  	10
 #define GPIO_SDA 	12
